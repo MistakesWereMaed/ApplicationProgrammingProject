@@ -68,7 +68,7 @@ public class AddPasswordController extends MasterController {
     	changeErrorMessage(confirmationTextLabel, 0, "");
     	
     	PasswordData data = new PasswordData(
-    			applicationTextField.getText(), usernameTextField.getText(), passwordTextField.getText()
+    			User.currentUser.getUserID(), applicationTextField.getText(), usernameTextField.getText(), passwordTextField.getText()
     		);
     	
     	if(blankFields(applicationTextField, usernameTextField, passwordTextField, confirmTextField)) {
@@ -80,7 +80,7 @@ public class AddPasswordController extends MasterController {
 
     		clearFields(applicationTextField, usernameTextField, passwordTextField, confirmTextField);
     		changeErrorMessage(confirmationTextLabel, 1, "Password added successfully");
-    		User.saveUsers();
+    		//User.saveUsers();
     		
     	} else {
     		changeErrorMessage(errorTextLabel, 1, "Username already exists");

@@ -15,16 +15,17 @@ import java.util.Scanner;
  */
 public class User {
 
-	private static String LOGIN_FILE_PATH = "./src/application/data/login.csv";
-	
+	//private static String LOGIN_FILE_PATH = "./src/application/data/login.csv";
+	private int userID;
 	private String username;
 	private String password;
 	private String name;
+	
 	private ArrayList<PasswordData> passwords = new ArrayList<PasswordData>();
 	private PasswordData selectedPassword;
 	private int selectedPasswordIndex;
 
-	public static HashMap<String, User> users = new HashMap<String, User>();
+	//public static HashMap<String, User> users = new HashMap<String, User>();
 	public static User currentUser;
 	
 	/**
@@ -39,25 +40,30 @@ public class User {
 		this.username = username;
 		this.password = password;
 	}
+	
+	public User(int userID, String name, String username, String password) 
+	{
+		this.userID = userID;
+		this.name = name;
+		this.username = username;
+		this.password = password;
+	}
 	/**
 	 * Initializes the HashMap of Users with data from thier data files
 	 */
-	public static void initialize() {
+	/*
+	public static boolean initialize() {
 		
-		if(loadUsers(LOGIN_FILE_PATH)) {
-			
-			for(User tempUser : users.values()) {
-				tempUser.loadPasswords("./src/application/data/" + tempUser.getUsername() + ".csv");
-			}
-			
-		}
+		return DatabaseManager.connect();
 		
 	}
+	*/
 	/**
 	 * Adds all users from the data file to the HashMap of Users
 	 * @param String filePath the path to the data file
 	 * @return whether the data was loaded successfully or not (boolean)
 	 */
+	/*
 	public static boolean loadUsers(String filePath) {
 		
 		try {
@@ -96,6 +102,7 @@ public class User {
 		}
 		
 	}
+	*/
 	/**
 	 * Creates a new User object from the given args and adds it to the HashMap of Users
 	 * @param String name of the new User
@@ -104,7 +111,7 @@ public class User {
 	 * @return whether the User was created and added successfully or not (boolean)
 	 */
 	public static boolean addUser(String name, String username, String password) {
-		
+		/*
 		if(users.containsKey(username)) {
 			return false;
 		} else {
@@ -113,15 +120,19 @@ public class User {
 			saveUsers();
 			return true;
 		}
+		*/
 		
+		User user = new User(name, username, password);
+		user.userID = DatabaseManager.insertUser(user);
+		return user.userID != -1 ? true : false;
 	}
 	/**
 	 * Removes the User from the HashMap of Users and deletes the associated data file
 	 * @param String username
 	 * @return whether the User was deleted successfully or not (boolean)
 	 */
-	public static boolean removeUser(String username) {
-		
+	public static boolean removeUser(int id) {
+		/*
 		if(users.containsKey(username)) {
 			
 			File userData = new File("./src/application/data/" + users.get(username).getUsername() + ".csv");
@@ -137,7 +148,11 @@ public class User {
 		} else {
 			return false;
 		}
+		*/
 		
+		//TODO: Delete passwords
+		
+		return DatabaseManager.removeUser(id);
 	}
 	/**
 	 * Checks if the User's credentials are correct and sets them as the currentUser
@@ -146,7 +161,7 @@ public class User {
 	 * @return whether the User was logged in successfully or not (boolean)
 	 */
 	public static boolean login(String username, String password) {
-		
+		/*
 		if(validateUser(username, password)) {
 			
 			currentUser = users.get(username);
@@ -155,12 +170,33 @@ public class User {
 		} else {
 			return false;
 		}
+		*/
+		
+		currentUser = DatabaseManager.getUser(username, password);
+		if(currentUser != null) {
+			
+			currentUser.passwords = DatabaseManager.getPasswords(currentUser.userID);
+			return true;
+			
+		}
+		
+		return false;
 		
 	}
+	
+	
+	public static void logout() {
+		
+		currentUser = null;
+		//return DatabaseManager.close();
+		
+	}
+	
 	/**
 	 * Writes the HashMap of Users to a data file, and writes each User's PasswordData list to thier own data files
 	 * @return whether the data was written successfully or not (boolean)
 	 */
+	/*
 	public static boolean saveUsers() {
 		
 		try {
@@ -179,12 +215,14 @@ public class User {
 		}
 		
 	}
+	*/
 	/**
 	 * Validates the credentials of the User
 	 * @param String username of the User
 	 * @param String password of the User
 	 * @return whether the User was validated successfully or not (boolean)
 	 */
+	/*
  	public static boolean validateUser(String username, String password) {
 		
 		if(users.containsKey(username) && users.get(username).getPassword().equals(password)) {
@@ -194,7 +232,7 @@ public class User {
 		}
 		
 	}
- 		
+ 	*/
  	
  	/**
  	 * Creates a new PasswordData object and adds it to the User's PasswordData list
@@ -203,19 +241,19 @@ public class User {
  	 * @param String password that is associated with this data
  	 * @return whether the PasswordData was added successfully or not (boolean)
  	 */
-	public boolean addPassword(String application, String username, String password) {
+	public boolean addPassword(int userID, int passwordID, String application, String username, String password) {
 		
-		PasswordData tempData = new PasswordData(application, username, password);
+		PasswordData data = new PasswordData(userID, passwordID, application, username, password);
 		
-		if(passwords.contains(tempData)) {
+		if(passwords.contains(data)) {
 			return false;
 		} else {
 			
-			passwords.add(tempData);
-			return true;
+			data.setPasswordID(DatabaseManager.insertPassword(data));
+			passwords.add(data);
+			return data.getPasswordID() != -1 ? true : false;
 			
 		}
-		
 	}
 	/**
 	 * Adds the passed PasswordData to the User's PasswordData list
@@ -228,11 +266,11 @@ public class User {
 			return false;
 		} else {
 			
+			data.setPasswordID(DatabaseManager.insertPassword(data));
 			passwords.add(data);
-			return true;
+			return data.getPasswordID() != -1 ? true : false;
 			
 		}
-		
 		
 	}
  	/**
@@ -241,8 +279,8 @@ public class User {
  	 * @param String newPassword that will be set in the PasswordData
  	 * @return whether the PasswordData was changed successfully or not (boolean)
  	 */
-	public boolean changePassword(int indexOfData, String newPassword) {
-		
+	public boolean changePassword(PasswordData data) {
+		/*
 		if(passwords.get(indexOfData) != null) {
 			
 			passwords.get(indexOfData).setPassword(newPassword);
@@ -251,7 +289,8 @@ public class User {
 		} else {
 			return false;
 		}
-		
+		*/
+		return DatabaseManager.updatePassword(data);
 	}
 	/**
 	 * Removes the given PasswordData from the PasswordData list
@@ -260,7 +299,7 @@ public class User {
 	 */
 	public boolean removePassword(PasswordData data) {
 		
-		return passwords.remove(data);
+		return passwords.remove(data) && DatabaseManager.removePassword(data.getPasswordID());
 		
 	}
 	/**
@@ -268,6 +307,7 @@ public class User {
 	 * @param String filePath of the dataFile
 	 * @return whether the PasswordData list was loaded successfully or not (boolean)
 	 */
+	/*
 	public boolean loadPasswords(String filePath) {
 		
 		try {
@@ -306,11 +346,13 @@ public class User {
 		}
 		
 	}
+	*/
 	/**
 	 * Writes the PasswordData list to the given data file
 	 * @param String filePath of the data file
 	 * @return whether the PasswordData list was written successfully or not (boolean)
 	 */
+	/*
 	public boolean savePasswords(String filePath) {
 		
 		try {
@@ -331,7 +373,7 @@ public class User {
 		}
 		
 	}
-	
+	*/
 	
 	/**
 	 * Formats the User data into a String
@@ -425,6 +467,14 @@ public class User {
 	 */
 	public void setSelectedPasswordIndex(int selectedPasswordIndex) {
 		this.selectedPasswordIndex = selectedPasswordIndex;
+	}
+
+	public int getUserID() {
+		return userID;
+	}
+
+	public void setUserID(int userID) {
+		this.userID = userID;
 	}
 	
 }

@@ -75,7 +75,7 @@ public class SettingsPageController extends MasterController{
     		User.currentUser.setName(nameTextField.getText());
         	User.currentUser.setUsername(usernameTextField.getText());
         	User.currentUser.setPassword(passwordTextField.getText());
-        	User.saveUsers();
+        	//User.saveUsers();
         	initialize();
         	changeErrorMessage(confirmationTextLabel, 1, "Account changed successfully");
         	
@@ -91,7 +91,7 @@ public class SettingsPageController extends MasterController{
     	
     	errorTextLabel.setOpacity(0);
     	
-    	if(User.removeUser(User.currentUser.getUsername())) {
+    	if(User.removeUser(User.currentUser.getUserID())) {
     		
     		User.currentUser = null;
         	switchScene("view/LoginPage.fxml", "Vexing Manager");

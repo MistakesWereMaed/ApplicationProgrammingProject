@@ -1,5 +1,6 @@
 package application;
 	
+import application.model.DatabaseManager;
 import application.model.User;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +15,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			
-			User.initialize();
+			//User.initialize();
 			
 			stage = primaryStage;
 			FXMLLoader loader = new FXMLLoader();
@@ -31,6 +32,10 @@ public class Main extends Application {
 	}
 	
 	public static void main(String[] args) {
+		
+		//TODO: Remove this after testing is complete
+		//DatabaseManager.test();
 		launch(args);
+		
 	}
 }

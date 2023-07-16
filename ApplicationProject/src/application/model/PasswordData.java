@@ -6,6 +6,8 @@ package application.model;
  */
 public class PasswordData{
 
+	private int userID;
+	private int passwordID;
 	private String application;
 	private String username;
 	private String password;
@@ -15,13 +17,25 @@ public class PasswordData{
 	 * @param username associated with this data
 	 * @param password associated with this data
 	 */
-	public PasswordData(String application, String username, String password) {
+	public PasswordData(int userID, String application, String username, String password) {
 		
+		this.userID = userID;
 		this.application = application;
 		this.username = username;
 		this.password = password;
 		
 	}
+	
+	public PasswordData(int userID, int passwordID, String application, String username, String password) {
+		
+		this.userID = userID;
+		this.passwordID = passwordID;
+		this.application = application;
+		this.username = username;
+		this.password = password;
+		
+	}
+	
 	/**
 	 * Formats the PasswordData object (with its password property) into a String
 	 * @return the formatted data (String)
@@ -91,6 +105,22 @@ public class PasswordData{
 	 */
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public int getPasswordID() {
+		return passwordID;
+	}
+
+	public void setPasswordID(int passwordID) {
+		this.passwordID = passwordID;
+	}
+
+	public int getUserID() {
+		return userID;
+	}
+
+	public void setUserID(int userID) {
+		this.userID = userID;
 	}
 	
 }

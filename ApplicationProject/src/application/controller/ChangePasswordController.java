@@ -73,17 +73,17 @@ public class ChangePasswordController extends MasterController{
     	changeErrorMessage(errorTextLabel, 0, "");
     	
     	PasswordData data = new PasswordData(
-    			applicationTextField.getText(), usernameTextField.getText(), passwordTextField.getText()
+    			User.currentUser.getUserID(), User.currentUser.getSelectedPassword().getPasswordID(), applicationTextField.getText(), usernameTextField.getText(), passwordTextField.getText()
     		);
     	
     	if(blankFields(applicationTextField, usernameTextField, passwordTextField, confirmTextField)) {
     		changeErrorMessage(errorTextLabel, 1, "Please fill out all fields");
     	} else if(!passwordTextField.getText().equals(confirmTextField.getText())) {
     		changeErrorMessage(errorTextLabel, 1, "Passwords do not match");
-    	} else if(User.currentUser.changePassword(User.currentUser.getSelectedPasswordIndex(), data.getPassword())) {
+    	} else if(User.currentUser.changePassword(data)) {
     		
     		changeErrorMessage(confirmationTextLabel, 1, "Password changed successfully");
-    		User.saveUsers();
+    		//User.saveUsers();
     		
     	} else {
     		changeErrorMessage(errorTextLabel, 1, "Failed to change password");

@@ -59,7 +59,7 @@ public class HomePageController extends MasterController{
      */
     public void initialize() {
     	
-    	welcomeLabel.setText("Welcome, " + User.currentUser.getUsername() + "!");
+    	welcomeLabel.setText("Welcome, " + User.currentUser.getName() + "!");
     	changeErrorMessage(errorTextLabel, 0, "");
     	
     	listView.setItems(passwords);
@@ -151,7 +151,7 @@ public class HomePageController extends MasterController{
     		changeErrorMessage(errorTextLabel, 1, "Failed to remove password");
     	} else {
     		
-    		User.saveUsers();
+    		//User.saveUsers();
         	refreshListView();
     		
     	}
