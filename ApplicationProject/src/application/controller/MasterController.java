@@ -13,10 +13,15 @@ import javafx.scene.layout.HBox;
  * @author Benjamin Samuel (MistakesWereMaed)
  */
 public class MasterController {
+	
+	protected final String LOGIN_VIEW = "view/LoginPage.fxml";
+	protected final String HOME_VIEW = "view/HomePage.fxml";
+	protected final String HOME_TITLE = "Vexing Manager";
+	
 	/**
 	 * Switches the current scene to the new scene
-	 * @param String filePath to the new fxml file
-	 * @param String title of the new page
+	 * @param filePath (String) - file path to the new fxml file
+	 * @param title of the new page (String)
 	 */
 	protected static void switchScene(String filePath, String title) {
 		
@@ -35,17 +40,18 @@ public class MasterController {
 		}
 		
 	}
+	
 	/**
 	 * Sets the currentUser to the given User data and switches to the HomePage fxml file if able, otherwise shows and error message
-	 * @param String username of the User
-	 * @param String password of the User
-	 * @param Label errorTextLabel to display the error message
+	 * @param username (String) - username of the User
+	 * @param password (String) - password of the User
+	 * @param errorTextLabel (Label) - error label to display the error message
 	 */
 	protected void login(String username, String password, Label errorTextLabel) {
     	
     	if(User.login(username, password)) {
     		
-    		switchScene("view/HomePage.fxml", "Vexing Manager");
+    		switchScene(HOME_VIEW, HOME_TITLE);
     		
     	} else {
     		
@@ -55,28 +61,29 @@ public class MasterController {
     	}
     	
     }
+	
 	/**
-	 * Switches to the LoginPage fxml file
+	 * Logs the current user out and switches to the LoginPage fxml file
 	 */
 	protected void logout() {
 		
-		User.currentUser = null;
-    	switchScene("view/LoginPage.fxml", "Vexing Manager");
+		User.logout();
+    	switchScene(LOGIN_VIEW, HOME_TITLE);
 		
 	}
+	
 	/**
 	 * Switches to the HomePage fxml file
 	 */
 	protected void switchToHome() {
-		
-    	switchScene("view/HomePage.fxml", "Vexing Manager");
-		
+    	switchScene(HOME_VIEW, HOME_TITLE);
 	}
+	
 	/**
 	 * Change the text and opactity of the given label
-	 * @param Label errorLabel to be changes
-	 * @param int opacity of the label
-	 * @param String errorMessage to be shown
+	 * @param errorLabel (Label) - label to be changed
+	 * @param opacity (int) - opacity of the label
+	 * @param errorMessage (String) - message to be shown
 	 */
 	protected void changeErrorMessage(Label errorLabel, int opacity, String errorMessage) {
     	
@@ -84,25 +91,25 @@ public class MasterController {
 		errorLabel.setOpacity(opacity);
     	
     }
+	
 	/**
 	 * Checks if any of the given fields are blank
-	 * @param TextField field1 to be checked
-	 * @param TextField field2 to be checked
-	 * @param TextField field3 to be checked
-	 * @param TextField field4 to be checked
-	 * @return whether any fields of blank (boolean)
+	 * @param field1 (TextField) - 1st field to be checked
+	 * @param field2 (TextField) - 2nd field to be checked
+	 * @param field3 (TextField) - 3rd field to be checked
+	 * @param field4 (TextField) - 4th field to be checked
+	 * @return whether any fields are empty (boolean)
 	 */
 	protected boolean blankFields(TextField field1, TextField field2, TextField field3, TextField field4) {
-		
 		return field1.getText() == "" && field2.getText() == "" && field3.getText() == "" && field4.getText() == "";
-		
 	}
+	
 	/**
 	 * Clears the given TextFields
-	 * @param TextField field1 to be cleared
-	 * @param TextField field2 to be cleared
-	 * @param TextField field3 to be cleared
-	 * @param TextField field4 to be cleared
+	 * @param field1 (TextField) - 1st field to be cleared
+	 * @param field2 (TextField) - 2nd field to be cleared
+	 * @param field3 (TextField) - 3rd field to be cleared
+	 * @param field4 (TextField) - 4th field to be cleared
 	 */
 	protected void clearFields(TextField field1, TextField field2, TextField field3, TextField field4) {
     	
@@ -112,10 +119,11 @@ public class MasterController {
 		field4.clear();
     	
     }
+	
 	/**
 	 * Clears the given TextFields
-	 * @param TextField field1 to be cleared
-	 * @param TextField field2 to be cleared
+	 * @param field1 (TextField) - 1st field to be cleared
+	 * @param field2 (TextField) - 2nd field to be cleared
 	 */
 	protected void clearFields(TextField field1, TextField field2) {
     	
@@ -123,6 +131,7 @@ public class MasterController {
 		field2.clear();
     	
     }
+	
 	/**
 	 * Blank superclass method that all children will inherit and implement
 	 */

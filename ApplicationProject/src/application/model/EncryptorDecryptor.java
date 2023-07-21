@@ -3,6 +3,7 @@ package application.model;
 import java.util.Base64;
 
 /**
+ * @deprecated
  * EncryptorDecryptor is a class containing methods to encrypt and decrypt data files
  * @author Daniel Dang (danield2141)
  */

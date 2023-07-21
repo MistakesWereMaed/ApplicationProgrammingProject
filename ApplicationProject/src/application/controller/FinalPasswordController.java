@@ -33,30 +33,24 @@ public class FinalPasswordController extends MasterController{
      * Sets up the Scene's labels and text fields
      */
     public void initialize() {
-    	
     	passwordLabel.setText(User.currentUser.getSelectedPassword().getPassword());
-    	
     }
     
     /**
      * Returns the User to the login page
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onLogoutButtonPressed(ActionEvent event) {
-    	
     	logout();
-    	
     }
     /**
      * Returns the User to the home page
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onMenuButtonPressed(ActionEvent event) {
-
     	switchToHome();
-    	
     }
 
 }

@@ -58,6 +58,7 @@ public class HangmanPageController extends MasterController{
     private Label welcomeTF;
     
     
+    private String FINAL_VIEW = "view/FinalPassword.fxml";
     
     private int HANGMAN_GUESSES = 7;
     
@@ -115,7 +116,7 @@ public class HangmanPageController extends MasterController{
  
     /**
      * Checks if the current guess is in the Hangman word
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onCheckButtonClicked(ActionEvent event) {
@@ -140,33 +141,29 @@ public class HangmanPageController extends MasterController{
     }
     /**
      * Returns the User to the login page
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onLogoutButtonPressed(ActionEvent event) {
-
     	logout();
-    	
     }
+    
     /**
      * Returns the User to the home page
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onMenuButtonPressed(ActionEvent event) {
-
     	switchToHome();
-    	
     }
+    
     /**
      * Resets the current Hangman game
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onResetButtonPressed(ActionEvent event) {
-
     	initialize();
-    	
     }
 
     
@@ -188,17 +185,13 @@ public class HangmanPageController extends MasterController{
      * Switches views to the FinalPassword fxml file
      */
     private void win() {
-    	
-    	switchScene("view/FinalPassword.fxml", "Vexing Manager");
-    	
+    	switchScene(FINAL_VIEW, HOME_TITLE);
     }
     /**
      * Shows a defeat message
      */
     private void lose() {
-    	
     	changeErrorMessage(resultLabel, 1, "You lost, better luck next time!");
-    	
     }
     
 }

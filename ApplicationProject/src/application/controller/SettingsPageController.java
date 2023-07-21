@@ -57,9 +57,10 @@ public class SettingsPageController extends MasterController{
     	confirmTextField.clear();
     	
     }
+    
     /**
      * Sets the User's data to the new data provided
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) = the button being clicked
      */
     @FXML
     void onConfirmChangesButtonClicked(ActionEvent event) {
@@ -75,50 +76,49 @@ public class SettingsPageController extends MasterController{
     		User.currentUser.setName(nameTextField.getText());
         	User.currentUser.setUsername(usernameTextField.getText());
         	User.currentUser.setPassword(passwordTextField.getText());
-        	//User.saveUsers();
+
         	initialize();
         	changeErrorMessage(confirmationTextLabel, 1, "Account changed successfully");
         	
     	}
     	
     }
+    
     /**
      * Deletes the currentUser's data and data files
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onDeleteAccountButtonClicked(ActionEvent event) {
     	
     	errorTextLabel.setOpacity(0);
     	
-    	if(User.removeUser(User.currentUser.getUserID())) {
+    	if(User.removeUser(User.currentUser)) {
     		
     		User.currentUser = null;
-        	switchScene("view/LoginPage.fxml", "Vexing Manager");
+        	switchScene(HOME_VIEW, HOME_TITLE);
     		
     	} else {
     		changeErrorMessage(errorTextLabel, 1, "Failed to delete user");
     	}
     }
+    
     /**
      * Returns the User to the login page
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onLogoutButtonPressed(ActionEvent event) {
-
     	logout();
-    	
     }
+    
     /**
      * Returns the User to the home page
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onMenuButtonPressed(ActionEvent event) {
-
     	switchToHome();
-    	
     }
 
 }

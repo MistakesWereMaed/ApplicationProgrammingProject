@@ -13,8 +13,8 @@ public class Hangman {
 	private String tempWord;
 	/**
 	 * The Hangman that is constructed with a word and amount of guesses
-	 * @param word
-	 * @param guessesLeft
+	 * @param word (String) - word to be guessed
+	 * @param guessesLeft (int) - number of guesses left
 	 */
 	public Hangman(String word, int guessesLeft) {
 		
@@ -23,7 +23,7 @@ public class Hangman {
 		
 	}
 	/**
-	 * Initializes the Hangman object's word_redacted and tempWord variabled based on the word it was constructed with
+	 * Initializes the Hangman object's word_redacted and tempWord variables based on the word it was constructed with
 	 */
 	public void initialize() {
 		
@@ -41,7 +41,7 @@ public class Hangman {
 	}
 	/**
 	 * Checks if a given guess String contains letters in the Hangman word
-	 * @param String guess to be checked
+	 * @param guess (String) - guess to be checked
 	 */
 	public void checkGuess(String guess) {
 		
@@ -76,43 +76,43 @@ public class Hangman {
 		
 	}
 	/**
-	 * Returns the word of the Hangman
-	 * @return word of the Hangman (String)
+	 * Returns the word being guessed
+	 * @return word being guessed (String)
 	 */
 	public String getWord() {
 		return word;
 	}
 	/**
-	 * Sets the word of the Hangman
-	 * @param String word of the Hangman
+	 * Sets the word being guessed
+	 * @param word (String) - word being guessed
 	 */
 	public void setWord(String word) {
 		this.word = word;
 	}
 	/**
-	 * Returns the redacted word of the Hangman
-	 * @return redacted word of the Hangman (String)
+	 * Returns the redacted version of the word being guessed
+	 * @return redacted version of word being guessed (String)
 	 */
 	public String getWord_Redacted() {
 		return word_redacted;
 	}
 	/**
-	 * Sets the redacted word of the Hangman
-	 * @param String redacted word of the Hangman
+	 * Sets the redacted version of the word being guessed
+	 * @param word_redacted (String) - redacted version of the word being guessed
 	 */
 	public void setWord_Redacted(String word_redacted) {
 		this.word_redacted = word_redacted;
 	}
 	/**
-	 * Returns the guesses left of the Hangman
-	 * @return guesses left of the Hangman (int)
+	 * Returns the number of guesses left
+	 * @return guesses left (int)
 	 */
 	public int getGuessesLeft() {
 		return guessesLeft;
 	}
 	/**
-	 * Sets the guesses left of the Hangman
-	 * @param int guesses left of the Hangman
+	 * Sets the number of guesses left
+	 * @param guessesLeft (int) - guesses left
 	 */
 	public void setGuessesLeft(int guessesLeft) {
 		this.guessesLeft = guessesLeft;

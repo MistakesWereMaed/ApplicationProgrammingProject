@@ -7,6 +7,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+/**
+ * DatabaseManager is a class containing all methods needed to interact with the chosen Database
+ * @author Benjamin Samuel (MistakesWereMaed)
+ */
 public class DatabaseManager {
 
 	//Local MySQL credentials, these can be updated to any remote host 
@@ -17,10 +21,8 @@ public class DatabaseManager {
 	private static Connection con = null;
 	private static Statement st = null;
 	
-	//TODO: update all functions to work with an ID (not implemented yet)
-	
 	/**
-	 * Tests all database functionality and prints the output of each function call
+	 * Tests all database functions
 	 */
 	public static void test() {
 		
@@ -30,29 +32,29 @@ public class DatabaseManager {
 		PasswordData testPasswordUpdated;
 		
 		testUser = new User("name", "username", "password");
-		testUser.setUserID(insertUser(testUser));
+		testUser.setID(insertUser(testUser));
 		getUser("username", "password");
-		testUserUpdated = new User(testUser.getUserID(), "NAME", "USERNAME", "PASSWORD");
+		testUserUpdated = new User(testUser.getID(), "NAME", "USERNAME", "PASSWORD");
 		updateUser(testUserUpdated);
 		getUser("USERNAME", "PASSWORD");
 		
-		testPassword = new PasswordData(testUserUpdated.getUserID(), "application", "username", "password");
+		testPassword = new PasswordData(testUserUpdated.getID(), "application", "username", "password");
 		testPassword.setPasswordID(insertPassword(testPassword));
-		getPasswords(testUserUpdated.getUserID());
-		testPasswordUpdated = new PasswordData(testUserUpdated.getUserID(), testPassword.getPasswordID(), "APPLICATION", "USERNAME", "PASSWORD");
+		getPasswords(testUserUpdated.getID());
+		testPasswordUpdated = new PasswordData(testUserUpdated.getID(), testPassword.getPasswordID(), "APPLICATION", "USERNAME", "PASSWORD");
 		updatePassword(testPasswordUpdated);
-		getPasswords(testUserUpdated.getUserID());
+		getPasswords(testUserUpdated.getID());
 		
 		removePassword(testPasswordUpdated.getPasswordID());
-		removeUser(testUserUpdated.getUserID());
+		removeUser(testUserUpdated.getID());
 	}
 	
 	/**
 	 * Connects to the given database url. Creates a connection / statement and saves both in global vars
-	 * @param url String url of the desired database
-	 * @param user String username for the desired database
-	 * @param pass String password for the desired database
-	 * @return Boolean the success state of the connection
+	 * @param url (String) - url of the desired database
+	 * @param username (String) - username for the desired database
+	 * @param password (String) - password for the desired database
+	 * @return success state of the connection (boolean)
 	 */
 	public static boolean connect() {
 		
@@ -60,7 +62,7 @@ public class DatabaseManager {
 		String fail = "Database connection failed: ";
 		
 		try {
-			//Register driver and get connection
+			
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 			st = con.createStatement();
@@ -74,14 +76,13 @@ public class DatabaseManager {
         	return false;
         	
         }
-		
 		return true;
 		
 	}
 
 	/**
 	 * Closes the database connection and statement
-	 * @return Boolean the success state of closing the connection
+	 * @return success state of closing the connection (boolean)
 	 */
 	public static boolean close() {
 		
@@ -89,7 +90,7 @@ public class DatabaseManager {
 		String fail = "Failed to close connection: ";
 		
 		try {
-			//Close connection if was previously opened
+			
 			if(con != null) {
 				con.close();
 				System.out.println(success);
@@ -101,26 +102,25 @@ public class DatabaseManager {
 			System.err.println(fail + e.getMessage());
 			return false;
 		}
-		
 		return true;
 		
 	}
 	
 	/**
 	 * Queries the database to get the user data associated with the given username and password
-	 * @param uname String username of the user
-	 * @param pass Password of the user
-	 * @return User object containing all retrieved user data
+	 * @param username (String) - username of the user
+	 * @param password (String) - password of the user
+	 * @return object containing all retrieved user data (User)
 	 */
 	public static User getUser(String uname, String pass) {
-		//SQL query string to get user data matching the args
+		
 		String queryStr = String.format(
 				"SELECT * FROM USER "
 				+ "WHERE USER_UNAME = '%s' "
 				+ "AND USER_PASSWORD = '%s'", uname, pass);
 		
 		String action = "Retrieving user...";
-		String success = "Retrieved user: ";
+		String success = "Retrieved user ";
 		String fail = "Failed to retrieve user: ";
 		
 		User user = null;
@@ -130,35 +130,73 @@ public class DatabaseManager {
 		
 		try {
 			
-			//Get the result of the query
 			ResultSet rs = st.executeQuery(queryStr);
 			rs.next();
-			//Create a User object to package the query results in
 			user = new User(
 					rs.getInt("USER_ID"),
 					rs.getString("USER_NAME"),
 					rs.getString("USER_UNAME"),
 					rs.getString("USER_PASSWORD"));
 			
-			System.out.print(success + user);
+			System.out.println(success + user.getID());
 			
 		} catch (SQLException e) {
 			System.err.println(fail + e.getMessage());
 		}
 		
 		close();
+		return user;
 		
+	}
+	
+	/**
+	 * Queries the database to get the user data associated with the given ID
+	 * @param userID (int) - id of the user
+	 * @return object containing all retrieved user data (User)
+	 */
+	public static User getUser(int userID) {
+		
+		String queryStr = String.format(
+				"SELECT * FROM USER "
+				+ "WHERE USER_ID = '%d'", userID);
+		
+		String action = "Retrieving user...";
+		String success = "Retrieved user ";
+		String fail = "Failed to retrieve user: ";
+		
+		User user = null;
+		
+		connect();
+		System.out.println(action);
+		
+		try {
+			
+			ResultSet rs = st.executeQuery(queryStr);
+			rs.next();
+			user = new User(
+					rs.getInt("USER_ID"),
+					rs.getString("USER_NAME"),
+					rs.getString("USER_UNAME"),
+					rs.getString("USER_PASSWORD"));
+			
+			System.out.println(success + user.getID());
+			
+		} catch (SQLException e) {
+			System.err.println(fail + e.getMessage());
+		}
+		
+		close();
 		return user;
 		
 	}
 	
 	/**
 	 * Queries the database to insert the given user data
-	 * @param user User object containing all data to be inserted
-	 * @return Boolean the success state of the insert query
+	 * @param user (User) - object containing all data to be inserted
+	 * @return the success state of the insert query (boolean)
 	 */
 	public static int insertUser(User user) {
-		//SQL query string to insert the user data in the USER table
+		
 		String insertQueryStr = String.format(
 				"INSERT INTO USER "
 				+ "VALUES (null, '%s', '%s', '%s')"
@@ -166,9 +204,8 @@ public class DatabaseManager {
 		String selectQueryStr = "SELECT LAST_INSERT_ID()";
 		
 		String action = "Inserting user...";
-		String success = "User inserted successfully";
+		String success = "Inserted user ";
 		String fail = "Failed to insert user: ";
-		
 		int userID = -1;
 		
 		connect();
@@ -180,7 +217,7 @@ public class DatabaseManager {
 			ResultSet rs = st.executeQuery(selectQueryStr);
 			rs.next();
 			userID = rs.getInt(1);
-			System.out.println(success);
+			System.out.println(success + userID);
 			
 		} catch (SQLException e) {
 			System.err.println(fail + e.getMessage());	
@@ -193,23 +230,21 @@ public class DatabaseManager {
 	
 	/**
 	 * Queries the database to update the specified user with the given data
-	 * @param uname String username of the user to be updated
-	 * @param updatedData User new data to set the given user to
-	 * @return Boolean the success state of the update query
+	 * @param user (User) - new data to set the given user to
+	 * @return the success state of the update query (boolean)
 	 */
 	public static boolean updateUser(User user) {
 		
-		//SQL query string to update the specified data in the USER table
 		String queryStr = String.format(
 				"UPDATE USER "
 				+ "SET USER_NAME = '%s', "
 				+ "USER_UNAME = '%s', "
 				+ "USER_PASSWORD = '%s'"
 				+ "WHERE USER_ID = '%d'", 
-				user.getName(), user.getUsername(), user.getPassword(), user.getUserID());
+				user.getName(), user.getUsername(), user.getPassword(), user.getID());
 		
 		String action = "Updating user...";
-		String success = "User update successfully";
+		String success = "Updated user " + user.getID();
 		String fail = "Failed to update user: ";
 		
 		return genericQuery(queryStr, action, success, fail);
@@ -217,19 +252,18 @@ public class DatabaseManager {
 	}
 	
 	/**
-	 * Queries the database to delete the given user
-	 * @param uname String username of the user to be deleted
-	 * @return Boolean the success state of the remove query
+	 * Queries the database to delete the user with the given userID
+	 * @param userID (int) - id of the user to be deleted
+	 * @return the success state of the remove query (boolean)
 	 */
 	public static boolean removeUser(int userID) {
 		
-		//SQL query string to delete the given user from the USER table
 		String queryStr = String.format(
 				"DELETE FROM USER "
 				+ "WHERE USER_ID = '%d'", userID);
 		
 		String action = "Removing user...";
-		String success = "User removed successfully";
+		String success = "Removed user " + userID;
 		String fail = "Failed to remove user: ";
 		
 		return genericQuery(queryStr, action, success, fail);
@@ -237,21 +271,19 @@ public class DatabaseManager {
 	}
 		
 	/**
-	 * Queries the database to get all of the passwords associated with the given username
-	 * @param uname String username of the user who's passwords are being retrieved
-	 * @return ArrayList<PasswordData> the list of all of the given user's passwords
+	 * Queries the database to get all of the passwords associated with the given userID
+	 * @param userID (int) - id of the user who's passwords are being retrieved
+	 * @return the list of all of the user's passwords (ArrayList)
 	 */
 	public static ArrayList<PasswordData> getPasswords(int userID) {
 		
-		//SQL query string to get the password data from the given user
 		String queryStr = String.format(
 				"SELECT * FROM PASSWORD "
 				+ "WHERE USER_ID = '%d'", userID);
 		
 		String action = "Retrieving passwords...";
-		String success = "Retrieved password: ";
+		String success = "Retrieved password ";
 		String fail = "Failed to retrieve passwords: ";
-		
 		ArrayList<PasswordData> passwords = new ArrayList<PasswordData>();
 		
 		connect();
@@ -259,9 +291,7 @@ public class DatabaseManager {
 		
 		try {
 			
-			//Get the result of the query
 			ResultSet rs = st.executeQuery(queryStr);
-			//Create a PasswordData object for each row of the result set to package the query results in
 			while(rs.next()) {
 				
 				PasswordData password = new PasswordData(
@@ -272,8 +302,7 @@ public class DatabaseManager {
 						rs.getString("PWD_PASSWORD"));
 				
 				passwords.add(password);
-				
-				System.out.print(success + password.toString_WithPassword());
+				System.out.println(success + password.getPasswordID());
 				
 			}
 			
@@ -282,20 +311,17 @@ public class DatabaseManager {
 		}
 		
 		close();
-		
 		return passwords;
 		
 	}
 	
 	/**
-	 * Queries the database to insert the given password with the username as its foreign key
-	 * @param uname String username of the user adding inserting the password
-	 * @param password PasswordData containing all data being inserted into the Password table
-	 * @return Boolean the success state of the insert query
+	 * Queries the database to insert the given password
+	 * @param password (PasswordData) - object containing all data being inserted into the Password table
+	 * @return the success state of the insert query (boolean)
 	 */
 	public static int insertPassword(PasswordData password) {
 		
-		//SQL query string to insert the password data into the PASSWORD table
 		String insertQueryStr = String.format(
 				"INSERT INTO PASSWORD "
 				+ "VALUES ('%d', null, '%s', '%s', '%s')", 
@@ -303,9 +329,8 @@ public class DatabaseManager {
 		String selectQueryStr = "SELECT LAST_INSERT_ID()";
 		
 		String action = "Inserting password...";
-		String success = "Password inserted successfully";
+		String success = "Inserted password ";
 		String fail = "Failed to insert password: ";
-		
 		int passwordID = -1;
 		
 		connect();
@@ -317,7 +342,7 @@ public class DatabaseManager {
 			ResultSet rs = st.executeQuery(selectQueryStr);
 			rs.next();
 			passwordID = rs.getInt(1);
-			System.out.println(success);
+			System.out.println(success + passwordID);
 			
 		} catch (SQLException e) {
 			System.err.println(fail + e.getMessage());	
@@ -329,15 +354,12 @@ public class DatabaseManager {
 	}
 	
 	/**
-	 * Queries the database to update the given users specified password
-	 * @param uname String username of the user that password belongs to
-	 * @param app String application containing the password being updated
-	 * @param password PasswordData new data that will be stored in the database
-	 * @return Boolean the success state of the query
+	 * Queries the database to update the given password
+	 * @param password (PasswordData) - object containing the new data that will be stored in the database
+	 * @return the success state of the query (boolean)
 	 */
 	public static boolean updatePassword(PasswordData password) {
 		
-		//SQL query string to update the password data of the PASSWORD table
 		String queryStr = String.format(
 				"UPDATE PASSWORD "
 				+ "SET PWD_APP = '%s', "
@@ -347,7 +369,7 @@ public class DatabaseManager {
 				password.getApplication(), password.getUsername(), password.getPassword(), password.getPasswordID());
 		
 		String action = "Updating password...";
-		String success = "Password updated successfully";
+		String success = "Updated password " + password.getPasswordID();
 		String fail = "Failed to update password: ";
 		
 		return genericQuery(queryStr, action, success, fail);
@@ -356,20 +378,18 @@ public class DatabaseManager {
 	
 	/**
 	 * Queries the database to delete the given password
-	 * @param uname String username of the user the password belongs to
-	 * @param app String application of the password being deleted
-	 * @return Boolean the success state of the query
+	 * @param passwordID (int) - id of the password being deleted
+	 * @return the success state of the query (boolean)
 	 */
 	public static boolean removePassword(int passwordID) {
 		
-		//SQL query string to remove the given password data from the PASSWORD table
 		String queryStr = String.format(
 				"DELETE FROM PASSWORD "
 				+ "WHERE PWD_ID = '%d'", 
 				passwordID);
 		
 		String action = "Removing password...";
-		String success = "Password removed successfully";
+		String success = "Removed password " + passwordID;
 		String fail = "Failed to remove password: ";
 		
 		return genericQuery(queryStr, action, success, fail);
@@ -377,23 +397,23 @@ public class DatabaseManager {
 	}
 	
 	/**
-	 * Helper function to query the database using the given query string
-	 * @param queryStr String query to be executed
-	 * @return Boolean the success state of the query
+	 * Helper function to execute queries that do not return ResultSets
+	 * @param queryStr (String) - query to be executed
+	 * @return the success state of the query (boolean)
 	 */
-	private static boolean genericQuery(String queryStr, String actionMessage, String successMessage, String failMessage) {
+	private static boolean genericQuery(String queryStr, String action, String success, String fail) {
 		
 		connect();
-		System.out.println(actionMessage);
+		System.out.println(action);
 		
 		try {
 			
 			st.executeUpdate(queryStr);
-			System.out.println(successMessage);
+			System.out.println(success);
 			
 		} catch (SQLException e) {
 			
-			System.err.println(failMessage + e.getMessage());
+			System.err.println(fail + e.getMessage());
 			return false;
 					
 		}

@@ -59,18 +59,18 @@ public class AddPasswordController extends MasterController {
     
     /**
      * Changes a new PasswordData to the currentUser's data if able, otherwise shows an error message
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onAddPasswordButtonClicked(ActionEvent event) {
 
     	changeErrorMessage(errorTextLabel, 0, "");
     	changeErrorMessage(confirmationTextLabel, 0, "");
-    	
+
     	PasswordData data = new PasswordData(
-    			User.currentUser.getUserID(), applicationTextField.getText(), usernameTextField.getText(), passwordTextField.getText()
+    			User.currentUser.getID(), applicationTextField.getText(), usernameTextField.getText(), passwordTextField.getText()
     		);
-    	
+
     	if(blankFields(applicationTextField, usernameTextField, passwordTextField, confirmTextField)) {
     		changeErrorMessage(errorTextLabel, 1, "Please fill out all fields");
     	} else if(!passwordTextField.getText().equals(confirmTextField.getText())) {
@@ -80,32 +80,29 @@ public class AddPasswordController extends MasterController {
 
     		clearFields(applicationTextField, usernameTextField, passwordTextField, confirmTextField);
     		changeErrorMessage(confirmationTextLabel, 1, "Password added successfully");
-    		//User.saveUsers();
     		
     	} else {
     		changeErrorMessage(errorTextLabel, 1, "Username already exists");
     	}
     	
     }
+    
     /**
      * Returns the User to the login page
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onLogoutButtonPressed(ActionEvent event) {
-    	
     	logout();
-    	
     }
+    
     /**
      * Returns the User to the home page
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onMenuButtonPressed(ActionEvent event) {
-
     	switchToHome();
-    	
     }
 
 }

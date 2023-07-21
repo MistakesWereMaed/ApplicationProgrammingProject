@@ -47,11 +47,14 @@ public class HomePageController extends MasterController{
     private Label welcomeLabel;
 
     
+    private String ADD_VIEW = "view/AddPassword.fxml";
+    private String CHANGE_VIEW = "view/ChangePassword.fxml";
+    private String SETTINGS_VIEW = "view/SettingsPage.fxml";
+    private String HANGMAN_VIEW = "view/HangmanPage.fxml";
     
     private final ObservableList<PasswordData> passwords = FXCollections.observableArrayList();
     
     private PasswordData selectedData;
-    private int selectedDataIndex;
     
     
     /**
@@ -70,48 +73,47 @@ public class HomePageController extends MasterController{
     
     /**
      * Switches to the AddPassword fxml file
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onAddPasswordButtonClicked(ActionEvent event) {
     	
-    	switchScene("view/AddPassword.fxml", "Vexing Manager");
+    	switchScene(ADD_VIEW, HOME_TITLE);
     	
     }
+    
     /**
      * Switches to the ChangePassword fxml file if able, otherwise shows an error message
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onChangePasswordButtonClicked(ActionEvent event) {
     	
     	selectedData = listView.getSelectionModel().getSelectedItem();
-    	selectedDataIndex = listView.getSelectionModel().getSelectedIndex();
     	
     	if(selectedData != null) {
     		
     		User.currentUser.setSelectedPassword(selectedData);
-    		User.currentUser.setSelectedPasswordIndex(selectedDataIndex);
-    		switchScene("view/ChangePassword.fxml", "Vexing Manager");
+    		switchScene(CHANGE_VIEW, HOME_TITLE);
     		
     	} else {
     		changeErrorMessage(errorTextLabel, 1, "Click on an entry");
     	}
     	
     }
+    
     /**
      * Deletes the currentUser's data and data files
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onSettingsButtonClicked(ActionEvent event) {
-    	
-    	switchScene("view/SettingsPage.fxml", "Vexing Manager");
-    	
+    	switchScene(SETTINGS_VIEW, HOME_TITLE);
     }
+    
     /**
      * Switches to the Hangman fxml file if able, otherwise shows an error message
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onGetPasswordButtonClicked(ActionEvent event) {
@@ -121,24 +123,26 @@ public class HomePageController extends MasterController{
     	if(selectedData != null) {
     		
     		User.currentUser.setSelectedPassword(selectedData);
-    		switchScene("view/HangmanPage.fxml", "Vexing Manager");
+    		switchScene(HANGMAN_VIEW, HOME_TITLE);
     		
     	} else {
     		changeErrorMessage(errorTextLabel, 1, "Click on an entry to get its password");
     	}
     	
     }
+    
     /**
      * Returns the User to the home page
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onLogoutButtonClicked(ActionEvent event) {
     	logout();
     }
+    
     /**
-     * Removes to the selected PasswordData if able, otherwise shows an error message
-     * @param ActionEvent event the button being clicked
+     * Removes the selected PasswordData if able, otherwise shows an error message
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onRemovePasswordButtonClicked(ActionEvent event) {
@@ -151,7 +155,6 @@ public class HomePageController extends MasterController{
     		changeErrorMessage(errorTextLabel, 1, "Failed to remove password");
     	} else {
     		
-    		//User.saveUsers();
         	refreshListView();
     		
     	}

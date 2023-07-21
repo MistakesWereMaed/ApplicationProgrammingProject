@@ -65,26 +65,23 @@ public class ChangePasswordController extends MasterController{
     
     /**
      * Changes the currentUser's password if able, otherwise shows an error message
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onChangePasswordButtonPressed(ActionEvent event) {
 
     	changeErrorMessage(errorTextLabel, 0, "");
-    	
+
     	PasswordData data = new PasswordData(
-    			User.currentUser.getUserID(), User.currentUser.getSelectedPassword().getPasswordID(), applicationTextField.getText(), usernameTextField.getText(), passwordTextField.getText()
+    			User.currentUser.getID(), User.currentUser.getSelectedPassword().getPasswordID(), applicationTextField.getText(), usernameTextField.getText(), passwordTextField.getText()
     		);
-    	
+
     	if(blankFields(applicationTextField, usernameTextField, passwordTextField, confirmTextField)) {
     		changeErrorMessage(errorTextLabel, 1, "Please fill out all fields");
     	} else if(!passwordTextField.getText().equals(confirmTextField.getText())) {
     		changeErrorMessage(errorTextLabel, 1, "Passwords do not match");
     	} else if(User.currentUser.changePassword(data)) {
-    		
     		changeErrorMessage(confirmationTextLabel, 1, "Password changed successfully");
-    		//User.saveUsers();
-    		
     	} else {
     		changeErrorMessage(errorTextLabel, 1, "Failed to change password");
     	}
@@ -92,23 +89,19 @@ public class ChangePasswordController extends MasterController{
     }
     /**
      * Returns the User to the login page
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onLogoutButtonClicked(ActionEvent event) {
-    	
     	logout();
-    	
     }
     /**
      * Returns the User to the home page
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onMenuButtonClicked(ActionEvent event) {
-
     	switchToHome();
-    	
     }
 
 }

@@ -35,8 +35,8 @@ public class SignupPageController extends MasterController {
     private TextField usernameTextField;
     
     /**
-     * Adds the new User to the HashMap of Users and switches to the HomePage fxml file if able, otherwise shows an error message
-     * @param ActionEvent event the button being clicked
+     * Inserts the new User into the Database and switches to the HomePage fxml file if able, otherwise shows an error message
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onSignupButtonClicked(ActionEvent event){

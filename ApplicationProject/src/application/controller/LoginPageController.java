@@ -30,6 +30,8 @@ public class LoginPageController extends MasterController{
     @FXML
     private TextField usernameTextField;
 
+    private String SIGNUP_VIEW = "view/SignupPage.fxml";
+    
     /**
      * Sets up the Scene's labels and text fields
      */
@@ -40,9 +42,10 @@ public class LoginPageController extends MasterController{
     	passwordTextField.clear();
     	
     }
+    
     /**
      * Switches to the HomePage fxml file if able, otherwise shows an error message
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onLoginButtonClicked(ActionEvent event) {
@@ -59,18 +62,15 @@ public class LoginPageController extends MasterController{
     		errorTextLabel.setOpacity(1);
     	}
     	
-    	
-    	
     }
+    
     /**
      * Switches to the SignupPage fxml file
-     * @param ActionEvent event the button being clicked
+     * @param event (ActionEvent) - the button being clicked
      */
     @FXML
     void onSignupButtonClicked(ActionEvent event) {
-    	
-    	switchScene("view/SignupPage.fxml", "Vexing Manager");
-    	
+    	switchScene(SIGNUP_VIEW, HOME_TITLE);
     }
 
 }
